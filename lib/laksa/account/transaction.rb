@@ -1,8 +1,8 @@
 module Laksa
   module Account
-    # 
+    #
     # Transaction
-    # 
+    #
     # Transaction is a functor. Its purpose is to encode the possible states a
     # Transaction can be in:  Confirmed, Rejected, Pending, or Initialised (i.e., not broadcasted).
     class Transaction
@@ -37,7 +37,7 @@ module Laksa
       end
 
       # constructs an already-rejected transaction.
-      def self.reject(tx_params, provider) 
+      def self.reject(tx_params, provider)
         Transaction.new(tx_params, provider, TxStatus::REJECTED)
       end
 
@@ -83,10 +83,10 @@ module Laksa
           version: self.version.to_i,
           nonce: self.nonce.to_i,
           toAddr: Wallet.to_checksum_address(self.to_addr),
-          amount: self.amount,
+          amount: self.amount.to_s,
           pubKey: self.sender_pub_key,
-          gasPrice: self.gas_price,
-          gasLimit: self.gas_limit,
+          gasPrice: self.gas_price.to_s,
+          gasLimit: self.gas_limit.to_i,
           code: self.code,
           data: self.data,
           signature: self.signature
@@ -103,7 +103,7 @@ module Laksa
 
       def confirmed?
         @status === TxStatus::CONFIRMED;
-      end 
+      end
 
       def rejected?
         @status === TxStatus::REJECTED;
@@ -119,7 +119,7 @@ module Laksa
       # directly.
       def confirm(tx_hash, max_attempts = GET_TX_ATTEMPTS, interval = 1)
         @status = TxStatus::PENDING
-        1.upto(max_attempts) do 
+        1.upto(max_attempts) do
           if self.track_tx(tx_hash)
             return self
           else
@@ -130,8 +130,8 @@ module Laksa
         self.status = TxStatus::REJECTED
         throw 'The transaction is still not confirmed after ${maxAttempts} attempts.'
       end
-      
-      def track_tx(tx_hash) 
+
+      def track_tx(tx_hash)
         puts "tracking transaction: #{tx_hash}"
 
         begin
