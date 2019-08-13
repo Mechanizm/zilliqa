@@ -8,7 +8,7 @@ module Laksa
         @provider = provider
         @accounts = accounts
         if accounts.length > 0
-          @default_account = accounts[0] 
+          @default_account = accounts[0]
         else
           @default_account = nil
         end
@@ -64,17 +64,18 @@ module Laksa
       end
 
       # Sets the default account of the wallet.
-      def set_default(address) 
+      def set_default(address)
         @default_account = @accounts[address]
       end
 
       # to_checksum_address
-      # 
+      #
       # takes hex-encoded string and returns the corresponding address
-      # 
+      #
       # @param {string} address
       # @returns {string}
       def self.to_checksum_address(address)
+        return Laksa::Util::Bech32.from_bech32(address) if Laksa::Util::Validator.bech32?(address)
         address = address.downcase.gsub('0x', '')
 
         s1 = Digest::SHA256.hexdigest(Util.decode_hex(address))
@@ -83,7 +84,7 @@ module Laksa
         ret = ['0x']
         address.each_char.each_with_index do |c, idx|
           if '1234567890'.include?(c)
-            ret << c 
+            ret << c
           else
             ret << ((v & (2 ** (255 - 6 * idx))) < 1 ? c.downcase : c.upcase)
           end
@@ -99,20 +100,20 @@ module Laksa
           # attempt to find the address
           address = Laksa::Crypto::KeyTool.get_address_from_public_key(tx_params.sender_pub_key)
           account = @accounts[address]
-          raise 'Could not sign the transaction with address as it does not exist' unless account 
+          raise 'Could not sign the transaction with address as it does not exist' unless account
 
           self.sign_with(tx, address)
         else
           raise 'This wallet has no default account.' unless @default_account
 
-          self.sign_with(tx, @default_account.address)  
+          self.sign_with(tx, @default_account.address)
         end
       end
 
       def sign_with(tx, address)
         account = @accounts[address]
 
-        raise 'The selected account does not exist on this Wallet instance.' unless account 
+        raise 'The selected account does not exist on this Wallet instance.' unless account
 
         if tx.nonce == nil
           result = @provider.GetBalance(account.address)
@@ -120,6 +121,7 @@ module Laksa
         end
 
         tx.sender_pub_key = account.public_key
+        tx.to_addr = Wallet.to_checksum_address(tx.to_addr)
         sig = account.sign_transaction(tx)
         tx.signature = sig.to_s
         tx
