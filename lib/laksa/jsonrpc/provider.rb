@@ -12,7 +12,10 @@ module Laksa
   module Jsonrpc
     class Provider
       def initialize(endpoint)
-        @client = JSONRPC::Client.new(endpoint)
+        conn = Faraday.new { |connection|
+          connection.adapter Faraday.default_adapter
+        }
+        @client = JSONRPC::Client.new(endpoint, { connection: conn })
       end
 
       def method_missing(sym, *args)
