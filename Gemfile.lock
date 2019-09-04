@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    laksa (0.1.0)
+    zilliqa (0.1.0)
       bitcoin-ruby
       bitcoin-secp256k1
       google-protobuf
@@ -25,7 +25,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    google-protobuf (3.7.1)
+    google-protobuf (3.7.1-universal-darwin)
     jsonrpc-client (0.1.3)
       faraday
       multi_json (>= 1.1.0)
@@ -42,9 +42,9 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.16)
-  laksa!
   minitest (~> 5.0)
   rake (~> 10.0)
+  zilliqa!
 
 BUNDLED WITH
    1.17.2

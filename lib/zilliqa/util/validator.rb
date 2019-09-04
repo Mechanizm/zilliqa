@@ -1,4 +1,4 @@
-module Laksa
+module Zilliqa
   module Util
     class Validator
       def self.public_key?(public_key)
@@ -28,7 +28,7 @@ module Laksa
       # @param {string} address
       # @returns {boolean}
       def self.checksum_address?(address)
-        self.address?(address) && Laksa::Account::Wallet::to_checksum_address(address) == address
+        self.address?(address) && Zilliqa::Account::Wallet::to_checksum_address(address) == address
       end
 
       def self.bech32?(address)

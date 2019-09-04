@@ -1,6 +1,6 @@
-# Laksa
+# Zilliqa
 
-Laksa -- Zilliqa Blockchain Ruby Library
+Zilliqa -- Zilliqa Blockchain Ruby Library
 
 The project is still under development.
 
@@ -13,7 +13,7 @@ Ruby(2.5.3)
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'laksa'
+gem 'zilliqa'
 ```
 
 And then execute:
@@ -22,38 +22,38 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install laksa
+    $ gem install zilliqa
 
 ## Usage
 
 ### Generate A new address
 ```ruby
-private_key = Laksa::Crypto::KeyTool.generate_private_key
-public_key = Laksa::Crypto::KeyTool.get_public_key_from_private_key(private_key)
-address = Laksa::Crypto::KeyTool.get_address_from_private_key(private_key)
+private_key = Zilliqa::Crypto::KeyTool.generate_private_key
+public_key = Zilliqa::Crypto::KeyTool.get_public_key_from_private_key(private_key)
+address = Zilliqa::Crypto::KeyTool.get_address_from_private_key(private_key)
 ```
 
 ### Validate an address
 ```ruby
 address = '2624B9EA4B1CD740630F6BF2FEA82AAC0067070B'
-Laksa::Util::Validator.address?(address)
+Zilliqa::Util::Validator.address?(address)
 ```
 
 ### Validate checksum address
 ```ruby
 checksum_address = '0x4BAF5faDA8e5Db92C3d3242618c5B47133AE003C'
-Laksa::Util::Validator.checksum_address?(checksum_address)
+Zilliqa::Util::Validator.checksum_address?(checksum_address)
 ```
 
 ### Deploy and Call a transaction
 ```ruby
 private_key = "e19d05c5452598e24caad4a0d85a49146f7be089515c905ae6a19e8a578a6930"
 
-provider = Laksa::Jsonrpc::Provider.new('https://dev-api.zilliqa.com')
-wallet = Laksa::Account::Wallet.new(provider)
+provider = Zilliqa::Jsonrpc::Provider.new('https://dev-api.zilliqa.com')
+wallet = Zilliqa::Account::Wallet.new(provider)
 address = wallet.add_by_private_key(private_key)
 
-factory = Laksa::Contract::ContractFactory.new(provider, wallet)
+factory = Zilliqa::Contract::ContractFactory.new(provider, wallet)
 
 contract = factory.new_contract(TEST_CONTRACT, [
   {
@@ -65,12 +65,12 @@ contract = factory.new_contract(TEST_CONTRACT, [
 ABI,
 )
 
-deploy_params = Laksa::Contract::DeployParams.new(nil, Laksa::Util.pack(8, 8), nil, 1000, 1000, nil)
-tx, deployed = contract.deploy(deploy_params)    
+deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
+tx, deployed = contract.deploy(deploy_params)
 
 assert tx.confirmed?
 assert deployed.deployed?
-assert_equal Laksa::Contract::ContractStatus::DEPLOYED, deployed.status
+assert_equal Zilliqa::Contract::ContractStatus::DEPLOYED, deployed.status
 
 assert /[A-F0-9]+/ =~ contract.address
 
@@ -81,7 +81,7 @@ call_tx = deployed.call(
         { vname: 'msg', type: 'String', value: 'Hello World!' },
       ],
       {
-        version: Laksa::Util.pack(8, 8),
+        version: Zilliqa::Util.pack(8, 8),
         amount: 0,
         gasPrice: 1000,
         gasLimit: 1000
@@ -91,4 +91,4 @@ call_tx = deployed.call(
 receipt = call_tx.tx_params.receipt
 ```
 
-the definition of [TEST_CONTRACT](https://github.com/FireStack-Lab/LaksaRuby/blob/master/test/contract/test_contract.rb) and [ABI](https://github.com/FireStack-Lab/LaksaRuby/blob/master/test/contract/test_abi.rb) can be found in this folder. 
+the definition of [TEST_CONTRACT](https://github.com/FireStack-Lab/ZilliqaRuby/blob/master/test/contract/test_contract.rb) and [ABI](https://github.com/FireStack-Lab/ZilliqaRuby/blob/master/test/contract/test_abi.rb) can be found in this folder.

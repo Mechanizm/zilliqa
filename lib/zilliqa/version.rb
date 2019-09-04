@@ -1,3 +1,3 @@
-module Laksa
+module Zilliqa
   VERSION = "0.1.0"
 end

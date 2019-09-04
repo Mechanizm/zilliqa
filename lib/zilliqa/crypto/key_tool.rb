@@ -1,7 +1,7 @@
 require 'secp256k1'
 require 'digest'
 
-module Laksa
+module Zilliqa
   module Crypto
     class KeyTool
       include Secp256k1
@@ -47,9 +47,9 @@ module Laksa
       end
 
       # getAddressFromPublicKey
-      # 
+      #
       # takes hex-encoded string and returns the corresponding address
-      # 
+      #
       # @param {string} public_key
       # @returns {string}
       def self.get_address_from_public_key(public_key)

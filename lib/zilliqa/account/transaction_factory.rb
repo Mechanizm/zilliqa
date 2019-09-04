@@ -1,4 +1,4 @@
-module Laksa
+module Zilliqa
   module Account
     class TransactionFactory
       attr_reader :provider, :signer
