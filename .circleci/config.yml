@@ -17,9 +17,12 @@ jobs:
             - zilliqa
 
       - run:
+          name: Install libsecp256k1-dev dependency
+          command: sudo apt-get update -y && sudo apt-get install -y libsecp256k1-dev
+
+      - run:
           name: Bundle Install
           command: bundle install
-
       - save_cache:
           key: zilliqa{{ checksum "Gemfile.lock" }}
           paths:
