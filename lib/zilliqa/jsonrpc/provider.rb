@@ -8,7 +8,7 @@ module JSONRPC
   end
 end
 
-module Laksa
+module Zilliqa
   module Jsonrpc
     class Provider
       def initialize(endpoint)

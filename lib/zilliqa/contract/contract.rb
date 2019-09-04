@@ -1,6 +1,6 @@
 require 'json'
 
-module Laksa
+module Zilliqa
   module Contract
     class Contract
       include Account
@@ -39,7 +39,7 @@ module Laksa
         return @status === ContractStatus::REJECTED
       end
 
-      def deploy(deploy_params, attempts = 33, interval = 1000, to_ds = false) 
+      def deploy(deploy_params, attempts = 33, interval = 1000, to_ds = false)
         raise 'Cannot deploy without code or initialisation parameters.' if @code == nil || @code == ''
         raise 'Cannot deploy without code or initialisation parameters.' if @init == nil || @init.length == 0
 
@@ -62,7 +62,7 @@ module Laksa
 
         if tx.rejected?
           @status = ContractStatus::REJECTED
-          
+
           return [tx, self]
         end
 
@@ -82,11 +82,11 @@ module Laksa
 
         tx_params = TxParams.new
         tx_params.id = params['id'] if params.has_key?('id')
-        tx_params.version = params['version'] if params.has_key?('version') 
-        tx_params.nonce = params['nonce'] if params.has_key?('nonce') 
-        tx_params.sender_pub_key = params['sender_pub_key'] if params.has_key?('sender_pub_key') 
-        tx_params.gas_price = params['gas_price'] if params.has_key?('gas_price') 
-        tx_params.gas_limit = params['gas_limit'] if params.has_key?('gas_limit') 
+        tx_params.version = params['version'] if params.has_key?('version')
+        tx_params.nonce = params['nonce'] if params.has_key?('nonce')
+        tx_params.sender_pub_key = params['sender_pub_key'] if params.has_key?('sender_pub_key')
+        tx_params.gas_price = params['gas_price'] if params.has_key?('gas_price')
+        tx_params.gas_limit = params['gas_limit'] if params.has_key?('gas_limit')
 
         tx_params.to_addr = @address
         tx_params.data = JSON.generate(data)
@@ -113,7 +113,7 @@ module Laksa
         else
           tx.confirm(response['result']['TranID'], attempts, interval)
         end
-        
+
         tx
       end
     end
@@ -133,7 +133,7 @@ module Laksa
       end
     end
 
-    class DeployParams 
+    class DeployParams
       attr_reader :id, :version, :nonce, :gas_price, :gas_limit, :sender_pub_key
       def initialize(id, version, nonce, gas_price, gas_limit, sender_pub_key)
         @id = id

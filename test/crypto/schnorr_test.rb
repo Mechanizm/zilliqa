@@ -9,8 +9,8 @@ class SchnorrTest < Minitest::Test
       public_key = d[1]
       private_key = d[2]
 
-      sig = Laksa::Crypto::Schnorr.sign(message, private_key, public_key)
-      result = Laksa::Crypto::Schnorr.verify(message, sig, public_key)
+      sig = Zilliqa::Crypto::Schnorr.sign(message, private_key, public_key)
+      result = Zilliqa::Crypto::Schnorr.verify(message, sig, public_key)
       assert result
     end
   end
@@ -25,8 +25,8 @@ class SchnorrTest < Minitest::Test
       r = d[4]
       s = d[5]
 
-      signature = Laksa::Crypto::Signature.new(r, s)
-      result = Laksa::Crypto::Schnorr.verify(message, signature, public_key)
+      signature = Zilliqa::Crypto::Signature.new(r, s)
+      result = Zilliqa::Crypto::Schnorr.verify(message, signature, public_key)
       assert result
     end
   end
@@ -40,7 +40,7 @@ class SchnorrTest < Minitest::Test
     exp_signature = "81A8195DDD6DA31B0DB2B0E82ED899461A4D7AC00605B9731577FEEA478D94CBFBC31B7E9A90CE745B076F835737F5C5CB86AC5A95F871FFCB99FBEE6FF52D"
 
     k_bn = OpenSSL::BN.new('24496634657573626939630273597777596474511689412653372979371659856036567975428', 10)
-    signature = Laksa::Crypto::Schnorr.try_sign(message, private_key, k_bn, public_key)
+    signature = Zilliqa::Crypto::Schnorr.try_sign(message, private_key, k_bn, public_key)
     assert_equal exp_signature, signature.to_s
   end
 
@@ -49,8 +49,8 @@ class SchnorrTest < Minitest::Test
     private_key = "e19d05c5452598e24caad4a0d85a49146f7be089515c905ae6a19e8a578a6930"
     public_key = "0246E7178DC8253201101E18FD6F6EB9972451D121FC57AA2A06DD5C111E58DC6A"
 
-    sig = Laksa::Crypto::Schnorr.sign(message, private_key, public_key)
-    result = Laksa::Crypto::Schnorr.verify(message, sig, public_key)
+    sig = Zilliqa::Crypto::Schnorr.sign(message, private_key, public_key)
+    result = Zilliqa::Crypto::Schnorr.verify(message, sig, public_key)
 
     assert result
   end

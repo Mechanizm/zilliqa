@@ -1,6 +1,6 @@
 require 'digest'
 
-module Laksa
+module Zilliqa
   module Account
     class Wallet
       # Takes an array of Account objects and instantiates a Wallet instance.
@@ -17,8 +17,8 @@ module Laksa
       # Creates a new keypair with a randomly-generated private key. The new
       # account is accessible by address.
       def create
-        private_key = Laksa::Crypto::KeyTool.generate_private_key
-        account = Laksa::Account::Account.new(private_key)
+        private_key = Zilliqa::Crypto::KeyTool.generate_private_key
+        account = Zilliqa::Account::Account.new(private_key)
 
         @accounts[account.address] = account
 
@@ -29,7 +29,7 @@ module Laksa
 
       # Adds an account to the wallet by private key.
       def add_by_private_key(private_key)
-        account = Laksa::Account::Account.new(private_key)
+        account = Zilliqa::Account::Account.new(private_key)
 
         @accounts[account.address] = account
 
@@ -41,7 +41,7 @@ module Laksa
 
       # Adds an account by keystore
       def add_by_keystore(keystore, passphrase)
-        account = Laksa::Account::Account.from_file(keystore, passphrase)
+        account = Zilliqa::Account::Account.from_file(keystore, passphrase)
 
         @accounts[account.address] = account
 
@@ -75,7 +75,7 @@ module Laksa
       # @param {string} address
       # @returns {string}
       def self.to_checksum_address(address)
-        return Laksa::Util::Bech32.from_bech32(address) if Laksa::Util::Validator.bech32?(address)
+        return Zilliqa::Util::Bech32.from_bech32(address) if Zilliqa::Util::Validator.bech32?(address)
         address = address.downcase.gsub('0x', '')
 
         s1 = Digest::SHA256.hexdigest(Util.decode_hex(address))
@@ -98,7 +98,7 @@ module Laksa
         tx_params = tx.tx_params
         if tx_params.sender_pub_key
           # attempt to find the address
-          address = Laksa::Crypto::KeyTool.get_address_from_public_key(tx_params.sender_pub_key)
+          address = Zilliqa::Crypto::KeyTool.get_address_from_public_key(tx_params.sender_pub_key)
           account = @accounts[address]
           raise 'Could not sign the transaction with address as it does not exist' unless account
 

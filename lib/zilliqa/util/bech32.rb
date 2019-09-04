@@ -1,6 +1,6 @@
 require 'bitcoin'
 
-module Laksa
+module Zilliqa
   module Util
     class Bech32
 
@@ -21,7 +21,7 @@ module Laksa
 
         ret = Bitcoin::Bech32.convert_bits(data[1], from_bits: 5, to_bits: 8, pad: false)
 
-        Laksa::Account::Wallet.to_checksum_address(Util.encode_hex(ret.pack('c*'))).sub('0x', '')
+        Zilliqa::Account::Wallet.to_checksum_address(Util.encode_hex(ret.pack('c*'))).sub('0x', '')
       end
     end
   end

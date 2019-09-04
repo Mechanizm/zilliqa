@@ -1,16 +1,16 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "laksa/version"
+require "zilliqa/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "laksa"
-  spec.version       = Laksa::VERSION
+  spec.name          = "zilliqa"
+  spec.version       = Zilliqa::VERSION
   spec.authors       = ["cenyongh"]
   spec.email         = ["cenyongh@gmail.com"]
 
-  spec.summary       = %q{LaksaRuby -- Zilliqa Blockchain  Library}
-  spec.description   = %q{LaksaRuby -- Zilliqa Blockchain  Library}
+  spec.summary       = %q{LaksaRubyRuby -- LaksaRuby Blockchain  Library}
+  spec.description   = %q{LaksaRubyRuby -- LaksaRuby Blockchain  Library}
   spec.homepage      = "https://github.com/FireStack-Lab/LaksaRuby"
   spec.license       = "MIT"
 

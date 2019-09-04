@@ -1,4 +1,4 @@
-module Laksa
+module Zilliqa
   module Account
     #
     # Transaction
@@ -42,21 +42,21 @@ module Laksa
       end
 
       def bytes
-        protocol = Laksa::Proto::ProtoTransactionCoreInfo.new
+        protocol = Zilliqa::Proto::ProtoTransactionCoreInfo.new
         protocol.version = self.version
         protocol.nonce = self.nonce
         protocol.toaddr =  Util.decode_hex(self.to_addr.downcase.sub('0x',''))
-        protocol.senderpubkey = Laksa::Proto::ByteArray.new(data: Util.decode_hex(self.sender_pub_key))
+        protocol.senderpubkey = Zilliqa::Proto::ByteArray.new(data: Util.decode_hex(self.sender_pub_key))
 
         raise 'standard length exceeded for value' if self.amount.to_i > 2 ** 128 - 1
 
-        protocol.amount = Laksa::Proto::ByteArray.new(data: bigint_to_bytes(self.amount.to_i))
-        protocol.gasprice = Laksa::Proto::ByteArray.new(data: bigint_to_bytes(self.gas_price.to_i))
+        protocol.amount = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(self.amount.to_i))
+        protocol.gasprice = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(self.gas_price.to_i))
         protocol.gaslimit = self.gas_limit
         protocol.code = self.code if self.code
         protocol.data = self.data if self.data
 
-        Laksa::Proto::ProtoTransactionCoreInfo.encode(protocol)
+        Zilliqa::Proto::ProtoTransactionCoreInfo.encode(protocol)
       end
 
       def tx_params

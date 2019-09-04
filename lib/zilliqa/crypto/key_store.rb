@@ -4,10 +4,10 @@ require 'openssl'
 require 'digest'
 require 'json'
 
-module Laksa
+module Zilliqa
   module Crypto
     class KeyStore
-      T_PBKDF2 = 'pbkdf2' 
+      T_PBKDF2 = 'pbkdf2'
       T_SCRYPT = 'scrypt'
 
       def initialize
@@ -45,21 +45,21 @@ module Laksa
         cipher.iv = iv
         cipher.key = encrypt_key
         cipher.padding = 0
-        
+
         ciphertext = cipher.update(Util.decode_hex(private_key)) + cipher.final
 
         mac = generate_mac(derived_key, ciphertext)
 
-        datas = {address: address, 
+        datas = {address: address,
           crypto: {
-            cipher: 'aes-128-ctr', 
-            cipherparams: {'iv': Util.encode_hex(iv)}, 
-            ciphertext: Util.encode_hex(ciphertext), 
-            kdf: kdf_type, 
-            kdfparams: {n: 8192, c:262144, r:8, p:1, dklen: 32, salt: salt.bytes}, 
+            cipher: 'aes-128-ctr',
+            cipherparams: {'iv': Util.encode_hex(iv)},
+            ciphertext: Util.encode_hex(ciphertext),
+            kdf: kdf_type,
+            kdfparams: {n: 8192, c:262144, r:8, p:1, dklen: 32, salt: salt.bytes},
             mac: mac
           },
-          id: SecureRandom.uuid, 
+          id: SecureRandom.uuid,
           version: 3
         }
 
@@ -90,15 +90,15 @@ module Laksa
         encrypt_key = derived_key[0..15]
 
         mac = generate_mac(derived_key, ciphertext)
-        
+
         raise 'Failed to decrypt.' if mac.casecmp(datas['crypto']['mac']) != 0
 
         cipher = OpenSSL::Cipher.new(datas['crypto']['cipher'])
-        cipher.decrypt 
+        cipher.decrypt
         cipher.iv = iv
         cipher.key = encrypt_key
         cipher.padding = 0
-        
+
         private_key = cipher.update(ciphertext) + cipher.final
 
         return Util.encode_hex private_key

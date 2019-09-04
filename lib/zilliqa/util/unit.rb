@@ -1,4 +1,4 @@
-module Laksa
+module Zilliqa
   module Util
     class Unit
       ZIL = 'zil'

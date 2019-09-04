@@ -35,7 +35,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   end
 end
 
-module Laksa
+module Zilliqa
   module Proto
     ByteArray = Google::Protobuf::DescriptorPool.generated_pool.lookup("laksa.proto.ByteArray").msgclass
     ProtoTransactionCoreInfo = Google::Protobuf::DescriptorPool.generated_pool.lookup("laksa.proto.ProtoTransactionCoreInfo").msgclass

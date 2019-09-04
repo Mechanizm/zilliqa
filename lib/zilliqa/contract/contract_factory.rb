@@ -1,6 +1,6 @@
 require 'digest'
 
-module Laksa
+module Zilliqa
   module Contract
     # ContractFactory
     #
@@ -19,7 +19,7 @@ module Laksa
       def self.get_address_for_contract(tx)
         sha256 = Digest::SHA256.new
 
-        sender_address = Laksa::Crypto::KeyTool.get_address_from_public_key(tx.sender_pub_key)
+        sender_address = Zilliqa::Crypto::KeyTool.get_address_from_public_key(tx.sender_pub_key)
 
         sha256 << Util.decode_hex(sender_address)
 
@@ -27,7 +27,7 @@ module Laksa
         if tx.nonce && !tx.nonce.empty?
           nonce = tx.nonce.to_i - 1
         end
-        
+
         nonce_hex = [nonce].pack('Q>*')
 
         sha256 << nonce_hex
@@ -35,7 +35,7 @@ module Laksa
         sha256.hexdigest[24..-1]
       end
 
-      def new_contract(code, init, abi) 
+      def new_contract(code, init, abi)
         Contract.new(self, code, abi, nil, init, nil)
       end
 

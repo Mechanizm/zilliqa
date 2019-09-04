@@ -2,7 +2,7 @@ require 'secp256k1'
 require 'digest'
 require 'openssl'
 
-module Laksa
+module Zilliqa
   module Crypto
     class Schnorr
       include Secp256k1
@@ -47,7 +47,7 @@ module Laksa
         throw 'Bad private key.' if prikey_bn.zero? || prikey_bn >= N
 
         # 1a. check that k is not 0
-        return nil if k_bn.zero? 
+        return nil if k_bn.zero?
 
         # 1b. check that k is < the order of the group
         return nil if k_bn >= N
