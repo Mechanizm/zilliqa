@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 module Zilliqa
@@ -5,7 +7,7 @@ module Zilliqa
     class Contract
       include Account
 
-      NIL_ADDRESS = "0000000000000000000000000000000000000000";
+      NIL_ADDRESS = '0000000000000000000000000000000000000000'
 
       attr_reader :factory, :provider, :signer, :code, :abi, :init, :state, :address, :status
 
@@ -28,37 +30,37 @@ module Zilliqa
       end
 
       def initialised?
-        return @status === ContractStatus::INITIALISED
+        @status == ContractStatus::INITIALISED
       end
 
       def deployed?
-        return @status === ContractStatus::DEPLOYED
+        @status == ContractStatus::DEPLOYED
       end
 
       def rejected?
-        return @status === ContractStatus::REJECTED
+        @status == ContractStatus::REJECTED
       end
 
-      def deploy(deploy_params, attempts = 33, interval = 1000, to_ds = false)
-        raise 'Cannot deploy without code or initialisation parameters.' if @code == nil || @code == ''
-        raise 'Cannot deploy without code or initialisation parameters.' if @init == nil || @init.length == 0
+      def deploy(deploy_params, attempts = 33, interval = 1000, _to_ds = false)
+        raise 'Cannot deploy without code or initialisation parameters.' if @code.nil? || @code == ''
+        raise 'Cannot deploy without code or initialisation parameters.' if @init.nil? || @init.length.zero?
 
-        tx_params = TxParams.new
-        tx_params.id = deploy_params.id
-        tx_params.version = deploy_params.version
-        tx_params.nonce = deploy_params.nonce
-        tx_params.sender_pub_key = deploy_params.sender_pub_key
-        tx_params.gas_price = deploy_params.gas_price
-        tx_params.gas_limit = deploy_params.gas_limit
-
-        tx_params.to_addr = NIL_ADDRESS
-        tx_params.amount = '0'
-        tx_params.code = @code.gsub("/\\", "")
-        tx_params.data = @init.to_json.gsub('\\"', '"')
+        tx_params = {
+          id: deploy_params.id,
+          version: deploy_params.version,
+          nonce: deploy_params.nonce,
+          sender_pub_key: deploy_params.sender_pub_key,
+          gas_price: deploy_params.gas_price,
+          gas_limit: deploy_params.gas_limit,
+          to_addr: NIL_ADDRESS,
+          amount: '0',
+          code: @code.gsub('/\\', ''),
+          data: @init.to_json.gsub('\\"', '"')
+        }
 
         tx = Transaction.new(tx_params, @provider)
 
-        tx = self.prepare_tx(tx, attempts, interval);
+        tx = prepare_tx(tx, attempts, interval)
 
         if tx.rejected?
           @status = ContractStatus::REJECTED
@@ -75,36 +77,36 @@ module Zilliqa
       def call(transition, args, params, attempts = 33, interval = 1000, to_ds = false)
         data = {
           _tag: transition,
-          params: args,
-        };
+          params: args
+        }
 
         return 'Contract has not been deployed!' unless @address
 
-        tx_params = TxParams.new
-        tx_params.id = params['id'] if params.has_key?('id')
-        tx_params.version = params['version'] if params.has_key?('version')
-        tx_params.nonce = params['nonce'] if params.has_key?('nonce')
-        tx_params.sender_pub_key = params['sender_pub_key'] if params.has_key?('sender_pub_key')
-        tx_params.gas_price = params['gas_price'] if params.has_key?('gas_price')
-        tx_params.gas_limit = params['gas_limit'] if params.has_key?('gas_limit')
-
-        tx_params.to_addr = @address
-        tx_params.data = JSON.generate(data)
+        tx_params = {
+          id: params['id'],
+          version: params['version'],
+          nonce: params['nonce'],
+          sender_pub_key: params['sender_pub_key'],
+          gas_price: params['gas_price'],
+          gas_limit: params['gas_limit'],
+          to_addr: @address,
+          data: JSON.generate(data)
+        }
 
         tx = Transaction.new(tx_params, @provider, TxStatus::INITIALIZED, to_ds)
 
-        tx = self.prepare_tx(tx, attempts, interval)
+        prepare_tx(tx, attempts, interval)
       end
 
       def state
-        return [] unless self.deployed
+        return [] unless deployed
 
         response = @provider.GetSmartContractState(@address)
-        return response.result
+        response.result
       end
 
       def prepare_tx(tx, attempts, interval)
-        tx = @signer.sign(tx);
+        tx = @signer.sign(tx)
 
         response = @provider.CreateTransaction(tx.to_payload)
 

@@ -13,16 +13,17 @@ class TransactionTest < Minitest::Test
   end
 
   def test_return_a_checksummed_address_from_tx_params
-    tx_params = Zilliqa::Account::TxParams.new
-    tx_params.version = 0
-    tx_params.to_addr = '2E3C9B415B19AE4035503A06192A0FAD76E04243'
-    tx_params.amount = '0'
-    tx_params.gas_price = '1000'
-    tx_params.gas_limit = 1000
+    tx_params = {
+      version: 0,
+      amount: '0',
+      gas_price: '1000',
+      gas_limit: 1000,
+      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
 
-    assert Zilliqa::Util::Validator.checksum_address?(tx.tx_params.to_addr)
+    assert Zilliqa::Util::Validator.checksum_address?(tx.to_addr)
   end
 
   def test_should_poll_and_call_queued_handlers_on_confirmation
@@ -55,12 +56,13 @@ class TransactionTest < Minitest::Test
       JSON.parse(JSON.generate(res))
     end
 
-    tx_params = Zilliqa::Account::TxParams.new
-    tx_params.version = 0
-    tx_params.to_addr = '1234567890123456789012345678901234567890'
-    tx_params.amount = '0'
-    tx_params.gas_price = '1000'
-    tx_params.gas_limit = 1000
+    tx_params = {
+      version: 0,
+      amount: '0',
+      gas_price: '1000',
+      gas_limit: 1000,
+      to_addr: '1234567890123456789012345678901234567890'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, @provider)
 
@@ -69,7 +71,7 @@ class TransactionTest < Minitest::Test
 
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
     confirmed = pending.confirm('some_hash');
-    state = confirmed.tx_params
+    state = confirmed
 
     assert confirmed.confirmed?
     assert_equal ({"cumulative_gas"=>1000, "success"=>true}), state.receipt
@@ -107,19 +109,20 @@ class TransactionTest < Minitest::Test
       JSON.parse(JSON.generate(res))
     end
 
-    tx_params = Zilliqa::Account::TxParams.new
-    tx_params.version = 0
-    tx_params.to_addr = '1234567890123456789012345678901234567890'
-    tx_params.amount = '0'
-    tx_params.gas_price = '1000'
-    tx_params.gas_limit = 1000
+    tx_params = {
+      version: 0,
+      amount: '0',
+      gas_price: '1000',
+      gas_limit: 1000,
+      to_addr: '1234567890123456789012345678901234567890'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, @provider)
 
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
     rejected = tx.confirm('some_hash');
 
-    assert !rejected.tx_params.receipt['success']
+    assert !rejected.receipt['success']
 
     @provider.verify
   end
@@ -162,12 +165,13 @@ class TransactionTest < Minitest::Test
       JSON.parse(JSON.generate(res))
     end
 
-    tx_params = Zilliqa::Account::TxParams.new
-    tx_params.version = 0
-    tx_params.to_addr = '1234567890123456789012345678901234567890'
-    tx_params.amount = '0'
-    tx_params.gas_price = '1000'
-    tx_params.gas_limit = 1000
+    tx_params = {
+      version: 0,
+      amount: '0',
+      gas_price: '1000',
+      gas_limit: 1000,
+      to_addr: '1234567890123456789012345678901234567890'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, @provider)
 
@@ -183,17 +187,17 @@ class TransactionTest < Minitest::Test
   end
 
   def test_encode_transaction_proto
-    tx_params = Zilliqa::Account::TxParams.new
-
-    tx_params.version = 0
-    tx_params.nonce = 0
-    tx_params.to_addr = '2E3C9B415B19AE4035503A06192A0FAD76E04243'
-    tx_params.sender_pub_key = '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a'
-    tx_params.amount = '340282366920938463463374607431768211455'
-    tx_params.gas_price = '100'
-    tx_params.gas_limit = 1000
-    tx_params.code = 'abc'
-    tx_params.data = 'def'
+    tx_params = {
+      version: 0,
+      nonce: 0,
+      sender_pub_key: '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a',
+      amount: '340282366920938463463374607431768211455',
+      gas_price: '100',
+      gas_limit: 1000,
+      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243',
+      code: 'abc',
+      data: 'def'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
 
@@ -204,15 +208,15 @@ class TransactionTest < Minitest::Test
   end
 
   def test_encode_transaction_proto_for_null_code_and_null_data
-    tx_params = Zilliqa::Account::TxParams.new
-
-    tx_params.version = 0
-    tx_params.nonce = 0
-    tx_params.to_addr = '2E3C9B415B19AE4035503A06192A0FAD76E04243'
-    tx_params.sender_pub_key = '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a'
-    tx_params.amount = '10000'
-    tx_params.gas_price = '100'
-    tx_params.gas_limit = 1000
+    tx_params = {
+      version: 0,
+      nonce: 0,
+      sender_pub_key: '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a',
+      amount: '10000',
+      gas_price: '100',
+      gas_limit: 1000,
+      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
 
@@ -239,19 +243,18 @@ class TransactionTest < Minitest::Test
     private_key = '7e78c742bca06824e4a5f0591260a2646339507c231daa5a47bf91d801f98239'
     signer.add_by_private_key(private_key)
 
-    tx_params = Zilliqa::Account::TxParams.new
-
-    tx_params.id = id
-
-    tx_params.version = version
-    tx_params.nonce = nonce
-    tx_params.sender_pub_key = sender_pub_key
-    tx_params.gas_price = gas_price
-    tx_params.gas_limit = gas_limit
-    tx_params.to_addr = to_addr
-    tx_params.amount = amount
-    tx_params.code = nil
-    tx_params.data = nil
+    tx_params = {
+      id: id,
+      version: version,
+      nonce: nonce,
+      sender_pub_key: sender_pub_key,
+      amount: amount,
+      gas_price: gas_price,
+      gas_limit: gas_limit,
+      to_addr: to_addr,
+      code: nil,
+      data: nil
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, provider, Zilliqa::Account::TxStatus::INITIALIZED, false)
 
