@@ -1,0 +1,9 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: ruby:2.6
+    steps:
+      - run: gem install bundler -v '2.0.2'
+      - run: bundle install
+      - run: bundle exec rake test
