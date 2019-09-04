@@ -2,8 +2,26 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: ruby:2.6
+      - image: circleci/ruby:2.6.1
+        environment:
+          RAILS_ENV: test
     steps:
-      - run: gem install bundler -v '2.0.2'
-      - run: bundle install
+      - checkout
+      - run:
+          name: Which bundler?
+          command: bundle -v
+
+      - restore_cache:
+          keys:
+            - zilliqa{{ checksum "Gemfile.lock" }}
+            - zilliqa
+
+      - run:
+          name: Bundle Install
+          command: bundle check --path vendor/bundle || bundle install --deployment
+
+      - save_cache:
+          key: zilliqa{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
       - run: bundle exec rake test
