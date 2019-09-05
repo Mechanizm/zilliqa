@@ -104,7 +104,7 @@ module Zilliqa
           gas_price: gas_price.to_s,
           gas_limit: gas_limit
         }, provider))
-        tx.transfer
+        tx.submit!
       end
 
       # signs an unsigned transaction with the default account.

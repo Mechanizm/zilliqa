@@ -140,7 +140,7 @@ module Zilliqa
         true
       end
 
-      def transfer
+      def submit!
         provider.CreateTransaction(to_payload)
       end
 
