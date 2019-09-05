@@ -93,7 +93,7 @@ module Zilliqa
           data: JSON.generate(data)
         }
 
-        tx = Transaction.new(tx_params, @provider, TxStatus::INITIALIZED, to_ds)
+        tx = Transaction.new(tx_params, @provider, Zilliqa::Account::Transaction::TX_STATUSES[:initialized], to_ds)
 
         prepare_tx(tx, attempts, interval)
       end
@@ -111,7 +111,7 @@ module Zilliqa
         response = @provider.CreateTransaction(tx.to_payload)
 
         if response['error']
-          tx.status = TxStatus::REJECTED
+          tx.status = Zilliqa::Account::Transaction::TX_STATUSES[:rejected]
         else
           tx.confirm(response['result']['TranID'], attempts, interval)
         end

@@ -8,13 +8,29 @@ module Zilliqa
     # Transaction is a functor. Its purpose is to encode the possible states a
     # Transaction can be in:  Confirmed, Rejected, Pending, or Initialised (i.e., not broadcasted).
     class Transaction
+      class StandardLengthError < StandardError
+        def initialize(msg = 'standard length exceeded for value')
+          super
+        end
+      end
+
+      class TrackTxError < StandardError
+      end
+
       ATTRIBUTES = %i[id version nonce amount gas_price gas_limit signature receipt sender_pub_key to_addr code data to_ds].freeze
       attr_accessor(*ATTRIBUTES)
       attr_accessor :provider, :status
 
       GET_TX_ATTEMPTS = 33
+      MAX_BIGINT_BYTES = 2**128 - 1
+      TX_STATUSES = {
+        initialized: 0,
+        pending: 1,
+        confirmed: 2,
+        rejected: 3
+      }.freeze
 
-      def initialize(tx_params, provider, status = TxStatus::INITIALIZED, to_ds = false)
+      def initialize(tx_params, provider, status = TX_STATUSES[:initialized], to_ds = false)
         unless tx_params.nil?
           tx_params.each do |key, value|
             next unless ATTRIBUTES.include?(key)
@@ -29,20 +45,19 @@ module Zilliqa
 
       # constructs an already-confirmed transaction.
       def self.confirm(tx_params, provider)
-        Transaction.new(tx_params, provider, TxStatus::CONFIRMED)
+        Transaction.new(tx_params, provider, TX_STATUSES[:confirmed])
       end
 
       # constructs an already-rejected transaction.
       def self.reject(tx_params, provider)
-        Transaction.new(tx_params, provider, TxStatus::REJECTED)
+        Transaction.new(tx_params, provider, TX_STATUSES[:rejected])
       end
 
       def bytes
         protocol = Zilliqa::Proto::ProtoTransactionCoreInfo.new
         protocol.version = version.to_i
         protocol.nonce = nonce.to_i
-        protocol.toaddr = Wallet.to_checksum_address(to_addr)
-        protocol.toaddr = Util.decode_hex(to_addr.downcase.sub('0x', ''))
+        protocol.toaddr = Util.decode_hex(Wallet.to_checksum_address(to_addr).downcase.sub('0x', ''))
         protocol.senderpubkey = Zilliqa::Proto::ByteArray.new(data: Util.decode_hex(sender_pub_key))
 
         raise 'standard length exceeded for value' if amount.to_i > 2**128 - 1
@@ -72,19 +87,19 @@ module Zilliqa
       end
 
       def pending?
-        @status == TxStatus::PENDING
+        @status == TX_STATUSES[:pending]
       end
 
       def initialised?
-        @status == TxStatus::INITIALIZED
+        @status == TX_STATUSES[:initialized]
       end
 
       def confirmed?
-        @status == TxStatus::CONFIRMED
+        @status == TX_STATUSES[:confirmed]
       end
 
       def rejected?
-        @status == TxStatus::REJECTED
+        @status == TX_STATUSES[:rejected]
       end
 
       # This sets the Transaction instance to a state
@@ -96,43 +111,31 @@ module Zilliqa
       # This is a low-level method that you should generally not have to use
       # directly.
       def confirm(tx_hash, max_attempts = GET_TX_ATTEMPTS, interval = 1)
-        @status = TxStatus::PENDING
+        @status = TX_STATUSES[:pending]
         1.upto(max_attempts) do
           return self if track_tx(tx_hash)
 
           sleep(interval)
         end
 
-        self.status = TxStatus::REJECTED
+        self.status = TX_STATUSES[:rejected]
         throw 'The transaction is still not confirmed after ${maxAttempts} attempts.'
       end
 
       def track_tx(tx_hash)
-        puts "tracking transaction: #{tx_hash}"
-
         begin
           response = @provider.GetTransaction(tx_hash)
-        rescue StandardError => e
-          puts 'transaction not confirmed yet'
-          puts e
+        rescue TrackTxError
         end
 
         if response['error']
-          puts 'transaction not confirmed yet'
           return false
         end
 
         self.id = response['result']['ID']
         self.receipt = response['result']['receipt']
         receipt['cumulative_gas'] = response['result']['receipt']['cumulative_gas'].to_i
-
-        if receipt && receipt['success']
-          puts 'Transaction confirmed!'
-          self.status = TxStatus::CONFIRMED
-        else
-          puts 'Transaction rejected!'
-          self.status = TxStatus::REJECTED
-        end
+        self.status = receipt && receipt['success'] ? TX_STATUSES[:confirmed] : TX_STATUSES[:rejected]
 
         true
       end
@@ -144,17 +147,10 @@ module Zilliqa
       private
 
       def bigint_to_bytes(value)
-        raise 'standard length exceeded for value' if value > 2**128 - 1
+        raise StandardLengthError if value > MAX_BIGINT_BYTES
 
         # bs = [value / (2**64), value % (2**64)].pack('Q>*')
       end
-    end
-
-    class TxStatus
-      INITIALIZED = 0
-      PENDING = 1
-      CONFIRMED = 2
-      REJECTED = 3
     end
   end
 end

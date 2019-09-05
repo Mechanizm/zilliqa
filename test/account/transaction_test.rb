@@ -256,7 +256,7 @@ class TransactionTest < Minitest::Test
       data: nil
     }
 
-    tx = Zilliqa::Account::Transaction.new(tx_params, provider, Zilliqa::Account::TxStatus::INITIALIZED, false)
+    tx = Zilliqa::Account::Transaction.new(tx_params, provider, Zilliqa::Account::Transaction::TX_STATUSES[:initialized], false)
 
     signed = signer.sign(tx)
     payload = signed.to_payload
