@@ -22,8 +22,7 @@ class TransactionTest < Minitest::Test
     }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
-
-    assert Zilliqa::Util::Validator.checksum_address?(tx.to_addr)
+    assert Zilliqa::Util::Validator.checksum_address?(tx.to_payload[:toAddr])
   end
 
   def test_should_poll_and_call_queued_handlers_on_confirmation
