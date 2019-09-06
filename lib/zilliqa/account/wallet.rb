@@ -94,7 +94,7 @@ module Zilliqa
       end
 
       def transfer(to_addr, amount)
-        gas_price = Integer(provider.GetMinimumGasPrice)
+        gas_price = Integer(@provider.GetMinimumGasPrice)
         gas_limit = 1
 
         tx = sign(Zilliqa::Account::Transaction.new({
@@ -103,7 +103,7 @@ module Zilliqa
           to_addr: to_addr,
           gas_price: gas_price.to_s,
           gas_limit: gas_limit
-        }, provider))
+        }, @provider))
         tx.submit!
       end
 
@@ -128,7 +128,7 @@ module Zilliqa
 
         raise 'The selected account does not exist on this Wallet instance.' unless account
 
-        if tx.nonce == nil
+        if tx.nonce.nil?
           result = @provider.GetBalance(account.address)
           tx.nonce = result['nonce'].to_i + 1
         end

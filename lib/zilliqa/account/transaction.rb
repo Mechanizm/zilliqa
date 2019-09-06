@@ -14,8 +14,8 @@ module Zilliqa
         end
       end
 
-      class TrackTxError < StandardError
-      end
+      class TrackTxError < StandardError; end
+      class TransactionError < JSONRPC::Error::ServerError; end
 
       ATTRIBUTES = %i[id version nonce amount gas_price gas_limit signature receipt sender_pub_key to_addr code data to_ds].freeze
       attr_accessor(*ATTRIBUTES)
@@ -60,7 +60,7 @@ module Zilliqa
         protocol.toaddr = Util.decode_hex(Wallet.to_checksum_address(to_addr).downcase.sub('0x', ''))
         protocol.senderpubkey = Zilliqa::Proto::ByteArray.new(data: Util.decode_hex(sender_pub_key))
 
-        raise 'standard length exceeded for value' if amount.to_i > 2**128 - 1
+        raise StandardLengthError if amount.to_i > MAX_BIGINT_BYTES
 
         protocol.amount = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(amount.to_i))
         protocol.gasprice = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(gas_price.to_i))
@@ -142,6 +142,8 @@ module Zilliqa
 
       def submit!
         provider.CreateTransaction(to_payload)
+      rescue TransactionError => e
+        { error: e }
       end
 
       private
@@ -149,7 +151,7 @@ module Zilliqa
       def bigint_to_bytes(value)
         raise StandardLengthError if value > MAX_BIGINT_BYTES
 
-        # bs = [value / (2**64), value % (2**64)].pack('Q>*')
+        bs = [value / (2**64), value % (2**64)].pack('Q>*')
       end
     end
   end
