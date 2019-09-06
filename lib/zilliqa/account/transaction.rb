@@ -55,8 +55,8 @@ module Zilliqa
 
       def bytes
         protocol = Zilliqa::Proto::ProtoTransactionCoreInfo.new
-        protocol.version = version
-        protocol.nonce = nonce
+        protocol.version = version.to_i
+        protocol.nonce = nonce.to_i
         protocol.toaddr = Util.decode_hex(Wallet.to_checksum_address(to_addr).downcase.sub('0x', ''))
         protocol.senderpubkey = Zilliqa::Proto::ByteArray.new(data: Util.decode_hex(sender_pub_key))
 
@@ -64,7 +64,7 @@ module Zilliqa
 
         protocol.amount = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(amount.to_i))
         protocol.gasprice = Zilliqa::Proto::ByteArray.new(data: bigint_to_bytes(gas_price.to_i))
-        protocol.gaslimit = gas_limit
+        protocol.gaslimit = gas_limit.to_i
         protocol.code = code if code
         protocol.data = data if data
 

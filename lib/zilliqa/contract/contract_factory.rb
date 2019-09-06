@@ -23,8 +23,8 @@ module Zilliqa
 
         sha256 << Util.decode_hex(sender_address)
 
-        nonce = 0;
-        if tx.nonce && !tx.nonce.empty?
+        nonce = 0
+        if tx.nonce
           nonce = tx.nonce.to_i - 1
         end
 

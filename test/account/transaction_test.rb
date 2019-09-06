@@ -228,7 +228,6 @@ class TransactionTest < Minitest::Test
   def test_devnet
     id = nil
     version = 21_823_489
-    nonce = 20
     gas_price = '1000000000'
     gas_limit = 1
 
@@ -245,7 +244,6 @@ class TransactionTest < Minitest::Test
     tx_params = {
       id: id,
       version: version,
-      nonce: nonce,
       sender_pub_key: sender_pub_key,
       amount: amount,
       gas_price: gas_price,
