@@ -190,10 +190,10 @@ class TransactionTest < Minitest::Test
       version: 0,
       nonce: 0,
       sender_pub_key: '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a',
-      amount: '340282366920938463463374607431768211455',
+      amount: '0',
       gas_price: '100',
       gas_limit: 1000,
-      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243',
+      to_addr: '3c9b415b19ae4035503a06192a0fad76e04243',
       code: 'abc',
       data: 'def'
     }
@@ -202,7 +202,7 @@ class TransactionTest < Minitest::Test
 
     ret = tx.bytes
     ret_hex = Zilliqa::Util.encode_hex(ret)
-    exp = '080010001a133c9b415b19ae4035503a06192a0fad76e0424322230a210246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a2a120a10ffffffffffffffffffffffffffffffff32120a100000000000000000000000000000006438e80742036162634a03646566'
+    exp = '080010001a133c9b415b19ae4035503a06192a0fad76e0424322230a210246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a2a120a100000000000000000000000000000000032120a100000000000000000000000000000006438e80742036162634a03646566'
     assert_equal exp.downcase, ret_hex
   end
 
@@ -214,7 +214,7 @@ class TransactionTest < Minitest::Test
       amount: '10000',
       gas_price: '100',
       gas_limit: 1000,
-      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243'
+      to_addr: '3c9b415b19ae4035503a06192a0fad76e04243'
     }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
@@ -228,7 +228,7 @@ class TransactionTest < Minitest::Test
   def test_devnet
     id = nil
     version = 21_823_489
-    nonce = 9
+    nonce = 20
     gas_price = '1000000000'
     gas_limit = 1
 
