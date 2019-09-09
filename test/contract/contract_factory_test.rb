@@ -351,7 +351,7 @@ class ContractFactoryTest < Minitest::Test
 
     @provider.verify
 
-    receipt = call_tx.tx_params.receipt
+    receipt = call_tx.receipt
 
     assert receipt && receipt['success']
   end

@@ -9,7 +9,7 @@ module Zilliqa
       end
 
       def new(tx_params, to_ds = false)
-        Transaction.new(tx_params, @provider, TxStatus::INITIALIZED, to_ds)
+        Transaction.new(tx_params, @provider, Zilliqa::Account::Transaction::TX_STATUSES[:initialized], to_ds)
       end
     end
   end

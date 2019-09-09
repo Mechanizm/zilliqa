@@ -43,16 +43,17 @@ class WalletTest < Minitest::Test
     wallet = Zilliqa::Account::Wallet.new(nil, {})
     wallet.add_by_private_key(private_key)
 
-    tx_params = Zilliqa::Account::TxParams.new
-    tx_params.version = '0'
-    tx_params.nonce = '0'
-    tx_params.to_addr = '2E3C9B415B19AE4035503A06192A0FAD76E04243'
-    tx_params.sender_pub_key = public_key
-    tx_params.amount = '340282366920938463463374607431768211455'
-    tx_params.gas_price = '100'
-    tx_params.gas_limit = '1000'
-    tx_params.code = 'abc'
-    tx_params.data = 'def'
+    tx_params = {
+      version: '0',
+      nonce: '0',
+      sender_pub_key: public_key,
+      amount: '340282366920938463463374607431768211455',
+      gas_price: '100',
+      gas_limit: '1000',
+      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243',
+      code: 'abc',
+      data: 'def'
+    }
 
     tx = Zilliqa::Account::Transaction.new(tx_params, nil)
 
