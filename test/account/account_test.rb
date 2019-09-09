@@ -10,7 +10,7 @@ class AccountTest < Minitest::Test
     address = 'b5c2cdd79c37209c3cb59e04b7c4062a8f5d5271'
 
     assert_equal public_key, account.public_key
-    assert_equal address, account.address
+    assert_equal address, Zilliqa::Util::Bech32.from_bech32(account.address).downcase
   end
 
   def test_from_file

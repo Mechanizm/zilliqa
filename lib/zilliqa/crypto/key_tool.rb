@@ -6,7 +6,7 @@ module Zilliqa
     class KeyTool
       include Secp256k1
       def initialize(private_key)
-        is_raw = private_key.length == 32 ? true : false
+        is_raw = private_key.length == 32
 
         @pk = PrivateKey.new(privkey: private_key, raw: is_raw)
       end
@@ -27,7 +27,7 @@ module Zilliqa
       # @param {string} privateKey
       # @returns {string}
       def self.get_public_key_from_private_key(private_key, is_compressed = true)
-        is_raw = private_key.length == 32 ? true : false
+        is_raw = private_key.length == 32
 
         pk = PrivateKey.new(privkey: private_key, raw: is_raw)
 
@@ -54,7 +54,7 @@ module Zilliqa
       # @returns {string}
       def self.get_address_from_public_key(public_key)
         orig_address = Digest::SHA256.hexdigest Util.decode_hex public_key
-        orig_address[24..-1].downcase
+        Util::Bech32.to_bech32(orig_address[24..-1].downcase)
       end
     end
   end

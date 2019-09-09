@@ -28,12 +28,12 @@ class KeyToolTest < Minitest::Test
   def test_get_address
     private_key = "B4EB8E8B343E2CCE46DB4E7571EC1D9654693CCA200BC41CC20148355CA62ED9";
     address = Zilliqa::Crypto::KeyTool.get_address_from_private_key(private_key)
-    assert_equal "4baf5fada8e5db92c3d3242618c5b47133ae003c", address
+    assert_equal Zilliqa::Util::Bech32.to_bech32("4baf5fada8e5db92c3d3242618c5b47133ae003c"), address
   end
 
   def test_get_address_from_public_key
     public_key = "0314738163b9bb67ad11aa464fe69a1147df263e8970d7dcfd8f993ddd39e81bd9";
     address = Zilliqa::Crypto::KeyTool.get_address_from_public_key(public_key);
-    assert_equal "4baf5fada8e5db92c3d3242618c5b47133ae003c", address
+    assert_equal Zilliqa::Util::Bech32.to_bech32("4baf5fada8e5db92c3d3242618c5b47133ae003c"), address
   end
 end

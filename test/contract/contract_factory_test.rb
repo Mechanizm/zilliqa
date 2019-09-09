@@ -20,7 +20,7 @@ class ContractFactoryTest < Minitest::Test
     tx.nonce = "19"
 
     address = Zilliqa::Contract::ContractFactory.get_address_for_contract(tx);
-    assert_equal '8f14cb1735b2b5fba397bea1c223d65d12b9a887', address
+    assert_equal 'ca640389bc48dea895d59483ffa20ccea78a663d', address
   end
 
   def test_new_contracts_should_have_a_stauts_of_initialised
