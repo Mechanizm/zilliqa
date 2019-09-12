@@ -66,6 +66,7 @@ class TransactionTest < Minitest::Test
     tx = Zilliqa::Account::Transaction.new(tx_params, @provider)
 
     @provider.expect("GetBalance", responses[0], [@address])
+    @provider.expect("testnet?", false)
     pending = @wallet.sign(tx)
 
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
@@ -236,6 +237,7 @@ class TransactionTest < Minitest::Test
     amount = '1000000000000'
 
     provider = Zilliqa::Jsonrpc::Provider.new('https://dev-api.zilliqa.com')
+    @provider.expect("testnet?", true)
     signer = Zilliqa::Account::Wallet.new(provider)
 
     private_key = '7e78c742bca06824e4a5f0591260a2646339507c231daa5a47bf91d801f98239'

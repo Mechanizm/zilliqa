@@ -40,7 +40,9 @@ class WalletTest < Minitest::Test
     private_key = "e19d05c5452598e24caad4a0d85a49146f7be089515c905ae6a19e8a578a6930"
     public_key = '0246e7178dc8253201101e18fd6f6eb9972451d121fc57aa2a06dd5c111e58dc6a'
 
-    wallet = Zilliqa::Account::Wallet.new(nil, {})
+    provider = Minitest::Mock.new
+    wallet = Zilliqa::Account::Wallet.new(provider, {})
+    provider.expect("testnet?", false)
     wallet.add_by_private_key(private_key)
 
     tx_params = {

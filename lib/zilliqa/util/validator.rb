@@ -12,6 +12,7 @@ module Zilliqa
       end
 
       def self.address?(address)
+        return true if bech32?(address)
         m = /(0x)?\h{40}/ =~ address
         m != nil
       end

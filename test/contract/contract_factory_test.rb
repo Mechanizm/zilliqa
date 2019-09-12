@@ -20,7 +20,7 @@ class ContractFactoryTest < Minitest::Test
     tx.nonce = "19"
 
     address = Zilliqa::Contract::ContractFactory.get_address_for_contract(tx);
-    assert_equal '8f14cb1735b2b5fba397bea1c223d65d12b9a887', address
+    assert_equal 'ca640389bc48dea895d59483ffa20ccea78a663d', address
   end
 
   def test_new_contracts_should_have_a_stauts_of_initialised
@@ -85,6 +85,7 @@ class ContractFactoryTest < Minitest::Test
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
+    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, deployed = contract.deploy(deploy_params)
@@ -134,6 +135,7 @@ class ContractFactoryTest < Minitest::Test
     end
 
     @provider.expect("GetBalance", responses[0], [@address])
+    @provider.expect("testnet?", false)
 
     def @provider.CreateTransaction(payload)
       raise 'something bad happened'
@@ -184,6 +186,7 @@ class ContractFactoryTest < Minitest::Test
 
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
+    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, contract = contract.deploy(deploy_params)
@@ -243,6 +246,7 @@ class ContractFactoryTest < Minitest::Test
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
+    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, contract = contract.deploy(deploy_params)
@@ -325,12 +329,14 @@ class ContractFactoryTest < Minitest::Test
       JSON.parse(JSON.generate(res))
     end
 
+    @provider.expect("testnet?", false)
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
     @provider.expect("GetBalance", responses[3], [@address])
     @provider.expect("CreateTransaction", responses[4], [Hash])
     @provider.expect("GetTransaction", responses[5], ['some_hash'])
+    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, contract = contract.deploy(deploy_params)
