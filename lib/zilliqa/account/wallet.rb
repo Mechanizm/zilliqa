@@ -115,21 +115,22 @@ module Zilliqa
           account = @accounts[address]
           raise 'Could not sign the transaction with address as it does not exist' unless account
 
-          self.sign_with(tx, address)
+          sign_with(tx, address)
         else
           raise 'This wallet has no default account.' unless @default_account
 
-          self.sign_with(tx, @default_account.address)
+          sign_with(tx, @default_account.address)
         end
       end
 
       def sign_with(tx, address)
         account = @accounts[address]
+        address = @provider.testnet? ? Zilliqa::Util::Bech32.from_bech32(account.address) : account.address
 
         raise 'The selected account does not exist on this Wallet instance.' unless account
 
         if tx.nonce.nil?
-          result = @provider.GetBalance(account.address)
+          result = @provider.GetBalance(address)
           tx.nonce = result['nonce'].to_i + 1
         end
 
