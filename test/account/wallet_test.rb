@@ -68,4 +68,52 @@ class WalletTest < Minitest::Test
     result = Zilliqa::Crypto::Schnorr.verify(message_hex, Zilliqa::Crypto::Signature.new(r, s), public_key)
     assert result
   end
+
+  require_relative '../contract/test_abi.rb'
+  require_relative '../contract/test_contract.rb'
+
+  def test_invalid_signature
+    private_key = Zilliqa::Crypto::KeyTool.generate_private_key
+    public_key = Zilliqa::Crypto::KeyTool.get_public_key_from_private_key(private_key)
+    address = Zilliqa::Crypto::KeyTool.get_address_from_private_key(private_key)
+    response = {
+      id: 1,
+      jsonrpc: '2.0',
+      result: {
+        balance: 888,
+        nonce: 1
+      }
+    }
+
+    provider = Minitest::Mock.new
+    wallet = Zilliqa::Account::Wallet.new(provider, {})
+    wallet.add_by_private_key(private_key)
+
+    provider.expect('testnet?', false)
+    provider.expect('GetBalance', response, [address])
+
+    100.times do |i|
+      # wallet_two = Zilliqa::Account::Wallet.new(provider, {})
+      # private_key_two = Zilliqa::Crypto::KeyTool.generate_private_key
+      # to_addr = Zilliqa::Crypto::KeyTool.get_address_from_private_key(private_key_two)
+      # wallet_two.add_by_private_key(private_key_two)
+      provider.expect('testnet?', false)
+      provider.expect('GetBalance', response, [address])
+
+      tx_params = {
+        sender_pub_key: public_key,
+        amount: (10**12) * rand(1..10),
+        gas_price: rand(10..15_000),
+        gas_limit: '1',
+        to_addr: '1234567890123456789012345678901234567890',
+        code: TEST_CONTRACT.gsub('/\\', ''),
+        data: JSON.generate(ABI)
+      }
+
+      tx = Zilliqa::Account::Transaction.new(tx_params, nil)
+
+      puts "sign #{i} times"
+      wallet.sign(tx)
+    end
+  end
 end
