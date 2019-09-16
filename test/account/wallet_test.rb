@@ -93,10 +93,6 @@ class WalletTest < Minitest::Test
     provider.expect('GetBalance', response, [address])
 
     100.times do |i|
-      # wallet_two = Zilliqa::Account::Wallet.new(provider, {})
-      # private_key_two = Zilliqa::Crypto::KeyTool.generate_private_key
-      # to_addr = Zilliqa::Crypto::KeyTool.get_address_from_private_key(private_key_two)
-      # wallet_two.add_by_private_key(private_key_two)
       provider.expect('testnet?', false)
       provider.expect('GetBalance', response, [address])
 
@@ -112,7 +108,6 @@ class WalletTest < Minitest::Test
 
       tx = Zilliqa::Account::Transaction.new(tx_params, nil)
 
-      puts "sign #{i} times"
       wallet.sign(tx)
     end
   end
