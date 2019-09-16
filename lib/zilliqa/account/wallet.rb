@@ -12,6 +12,8 @@ module Zilliqa
     end
 
     class Wallet
+      MAINNET = 65_537
+
       # Takes an array of Account objects and instantiates a Wallet instance.
       def initialize(provider = nil, accounts = {})
         @provider = provider
@@ -107,7 +109,7 @@ module Zilliqa
         gas_limit = 1
 
         tx = sign(Zilliqa::Account::Transaction.new({
-          version: 65537,
+          version: MAINNET,
           amount: amount.to_s,
           to_addr: to_addr,
           gas_price: gas_price.to_s,
@@ -147,14 +149,20 @@ module Zilliqa
 
         begin
           sig ||= account.sign_transaction(tx)
-          raise InvalidSignatureSizeError.new(sig.to_s) unless Zilliqa::Util::Validator.signature?(sig.to_s)
+          raise InvalidSignatureSizeError.new(sig.to_s) unless valid_signature?(sig)
 
         rescue InvalidSignatureSizeError => e
           sig = account.sign_transaction(tx)
-          retry if sig.to_s != e.signature
+          retry if sig.to_s != e.signature && valid_signature?(sig)
         end
         tx.signature = sig.to_s
         tx
+      end
+
+      private
+
+      def valid_signature?(sig)
+        Zilliqa::Util::Validator.signature?(sig.to_s)
       end
     end
   end
