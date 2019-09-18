@@ -2,15 +2,6 @@ require 'digest'
 
 module Zilliqa
   module Account
-    class InvalidSignatureSizeError < StandardError
-      attr_reader :signature, :msg
-
-      def initialize(signature)
-        @msg = 'Invalid signature size'
-        @signature = signature
-      end
-    end
-
     class Wallet
       MAINNET = 65_537
 
@@ -146,23 +137,9 @@ module Zilliqa
         end
 
         tx.sender_pub_key = account.public_key
-
-        begin
-          sig ||= account.sign_transaction(tx)
-          raise InvalidSignatureSizeError.new(sig.to_s) unless valid_signature?(sig)
-
-        rescue InvalidSignatureSizeError => e
-          sig = account.sign_transaction(tx)
-          retry if sig.to_s != e.signature && valid_signature?(sig)
-        end
+        sig = account.sign_transaction(tx)
         tx.signature = sig.to_s
         tx
-      end
-
-      private
-
-      def valid_signature?(sig)
-        Zilliqa::Util::Validator.signature?(sig.to_s)
       end
     end
   end

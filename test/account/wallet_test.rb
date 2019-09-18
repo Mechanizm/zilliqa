@@ -87,6 +87,7 @@ class WalletTest < Minitest::Test
 
     provider = Minitest::Mock.new
     wallet = Zilliqa::Account::Wallet.new(provider, {})
+    account = Zilliqa::Account::Account.new(private_key)
     wallet.add_by_private_key(private_key)
 
     provider.expect('testnet?', false)
@@ -107,8 +108,8 @@ class WalletTest < Minitest::Test
       }
 
       tx = Zilliqa::Account::Transaction.new(tx_params, nil)
-
-      wallet.sign(tx)
+      sig = account.sign_transaction(tx)
+      Zilliqa::Util::Validator.signature?(sig.to_s)
     end
   end
 end
