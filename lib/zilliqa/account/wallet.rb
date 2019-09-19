@@ -3,6 +3,8 @@ require 'digest'
 module Zilliqa
   module Account
     class Wallet
+      MAINNET = 65_537
+
       # Takes an array of Account objects and instantiates a Wallet instance.
       def initialize(provider = nil, accounts = {})
         @provider = provider
@@ -98,7 +100,7 @@ module Zilliqa
         gas_limit = 1
 
         tx = sign(Zilliqa::Account::Transaction.new({
-          version: 65537,
+          version: MAINNET,
           amount: amount.to_s,
           to_addr: to_addr,
           gas_price: gas_price.to_s,

@@ -19,11 +19,12 @@ module Zilliqa
       # @param {String} key
       def self.sign(message, private_key, public_key)
         sig = nil
-        while !sig
+        until sig
           k = Util.encode_hex SecureRandom.random_bytes(32)
           k_bn = OpenSSL::BN.new(k, 16)
 
-          sig = self.try_sign(message, private_key, k_bn, public_key)
+          sig = try_sign(message, private_key, k_bn, public_key)
+          sig = Zilliqa::Util::Validator.signature?(sig.to_s) ? sig : nil
         end
 
         sig
