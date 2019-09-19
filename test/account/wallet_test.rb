@@ -109,7 +109,7 @@ class WalletTest < Minitest::Test
 
       tx = Zilliqa::Account::Transaction.new(tx_params, nil)
       sig = account.sign_transaction(tx)
-      Zilliqa::Util::Validator.signature?(sig.to_s)
+      assert Zilliqa::Util::Validator.signature?(sig.to_s)
     end
   end
 end
