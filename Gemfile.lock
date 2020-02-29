@@ -25,7 +25,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    google-protobuf (3.7.1-universal-darwin)
+    google-protobuf (3.7.1)
     jsonrpc-client (0.1.3)
       faraday
       multi_json (>= 1.1.0)
@@ -33,7 +33,7 @@ GEM
     multi_json (1.13.1)
     multipart-post (2.1.1)
     pbkdf2-ruby (0.2.1)
-    rake (10.5.0)
+    rake (13.0.1)
     scrypt (3.0.6)
       ffi-compiler (>= 1.0, < 2.0)
 
@@ -43,7 +43,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 1.16)
   minitest (~> 5.0)
-  rake (~> 10.0)
+  rake (~> 13.0)
   zilliqa!
 
 BUNDLED WITH
