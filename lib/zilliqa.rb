@@ -17,5 +17,5 @@ require 'zilliqa/util/bech32'
 
 
 module Zilliqa
-
+  MAINNET = 65_537
 end

@@ -1,4 +1,5 @@
 require 'jsonrpc-client'
+require 'zilliqa/util/bech32'
 
 module JSONRPC
   class Base
@@ -17,6 +18,11 @@ module Zilliqa
         }
         @client = JSONRPC::Client.new(endpoint, { connection: conn })
         @endpoint = endpoint
+      end
+
+      def GetBalance(*args)
+        formatted = args.map { |addr| Util::Bech32.to_checksum_address(addr).downcase.sub('0x', '') }
+        @client.invoke('GetBalance', formatted)
       end
 
       def method_missing(sym, *args)
