@@ -6,20 +6,20 @@ require "zilliqa/version"
 Gem::Specification.new do |spec|
   spec.name          = "zilliqa"
   spec.version       = Zilliqa::VERSION
-  spec.authors       = ["cenyongh"]
-  spec.email         = ["cenyongh@gmail.com"]
+  spec.authors       = ["snuff" ,"cenyongh"]
+  spec.email         = ["vladimir@protasevi.ch", "cenyongh@gmail.com"]
 
-  spec.summary       = %q{LaksaRubyRuby -- LaksaRuby Blockchain  Library}
-  spec.description   = %q{LaksaRubyRuby -- LaksaRuby Blockchain  Library}
-  spec.homepage      = "https://github.com/FireStack-Lab/LaksaRuby"
+  spec.summary       = %q{Zilliqa — Zilliqa Ruby Blockchain Library}
+  spec.description   = %q{Zilliqa -- Zilliqa Ruby Blockchain Library}
+  spec.homepage      = "https://github.com/mechanizm/zilliqa"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/FireStack-Lab/LaksaRuby"
-    spec.metadata["changelog_uri"] = "https://github.com/FireStack-Lab/LaksaRuby"
+    spec.metadata["source_code_uri"] = "https://github.com/mechanizm/zilliqa"
+    spec.metadata["changelog_uri"] = "https://github.com/mechanizm/zilliqa"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
