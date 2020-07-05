@@ -28,10 +28,6 @@ module Zilliqa
       def method_missing(sym, *args)
         @client.invoke(sym.to_s, args)
       end
-
-      def testnet?
-        @endpoint && !@endpoint.match('dev').nil?
-      end
     end
   end
 end

@@ -3,7 +3,6 @@ require 'digest'
 module Zilliqa
   module Account
     class Wallet
-      MAINNET = 65_537
 
       # Takes an array of Account objects and instantiates a Wallet instance.
       def initialize(provider = nil, accounts = {})
@@ -70,30 +69,6 @@ module Zilliqa
         @default_account = @accounts[address]
       end
 
-      # to_checksum_address
-      #
-      # takes hex-encoded string and returns the corresponding address
-      #
-      # @param {string} address
-      # @returns {string}
-      def self.to_checksum_address(address)
-        return Zilliqa::Util::Bech32.from_bech32(address) if Zilliqa::Util::Validator.bech32?(address)
-        address = address.downcase.gsub('0x', '')
-
-        s1 = Digest::SHA256.hexdigest(Util.decode_hex(address))
-        v = s1.to_i(base=16)
-
-        ret = ['0x']
-        address.each_char.each_with_index do |c, idx|
-          if '1234567890'.include?(c)
-            ret << c
-          else
-            ret << ((v & (2 ** (255 - 6 * idx))) < 1 ? c.downcase : c.upcase)
-          end
-        end
-
-        ret.join
-      end
 
       def transfer(to_addr, amount)
         gas_price = Integer(@provider.GetMinimumGasPrice)
@@ -127,7 +102,7 @@ module Zilliqa
 
       def sign_with(tx, address)
         account = @accounts[address]
-        address = @provider.testnet? ? Zilliqa::Util::Bech32.from_bech32(account.address) : account.address
+        address = account.address
 
         raise 'The selected account does not exist on this Wallet instance.' unless account
 
