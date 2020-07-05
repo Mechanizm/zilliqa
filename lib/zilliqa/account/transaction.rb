@@ -57,7 +57,7 @@ module Zilliqa
         protocol = Zilliqa::Proto::ProtoTransactionCoreInfo.new
         protocol.version = version.to_i
         protocol.nonce = nonce.to_i
-        protocol.toaddr = Util.decode_hex(Wallet.to_checksum_address(to_addr).downcase.sub('0x', ''))
+        protocol.toaddr = Util.decode_hex(Util::Bech32.to_checksum_address(to_addr).downcase.sub('0x', ''))
         protocol.senderpubkey = Zilliqa::Proto::ByteArray.new(data: Util.decode_hex(sender_pub_key))
 
         raise StandardLengthError if amount.to_i > MAX_BIGINT_BYTES
@@ -75,7 +75,7 @@ module Zilliqa
         {
           version: version.to_i,
           nonce: nonce.to_i,
-          toAddr: Wallet.to_checksum_address(to_addr),
+          toAddr: Util::Bech32.to_checksum_address(to_addr),
           amount: amount.to_s,
           pubKey: sender_pub_key,
           gasPrice: gas_price.to_s,

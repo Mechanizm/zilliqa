@@ -21,7 +21,7 @@ module Zilliqa
 
         ret = Bitcoin::Bech32.convert_bits(data[1], from_bits: 5, to_bits: 8, pad: false)
 
-        Zilliqa::Account::Wallet.to_checksum_address(Util.encode_hex(ret.pack('c*'))).sub('0x', '')
+        to_checksum_address(Util.encode_hex(ret.pack('c*'))).sub('0x', '')
       end
 
       # to_checksum_address
