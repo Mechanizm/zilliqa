@@ -1,10 +1,10 @@
-require 'secp256k1'
+require 'bitcoin_secp256k1'
 require 'digest'
 
 module Zilliqa
   module Crypto
     class KeyTool
-      include Secp256k1
+      include BitcoinSecp256k1
       def initialize(private_key)
         is_raw = private_key.length == 32
 
