@@ -1,11 +1,11 @@
-require 'secp256k1'
+require 'bitcoin_secp256k1'
 require 'digest'
 require 'openssl'
 
 module Zilliqa
   module Crypto
     class Schnorr
-      include Secp256k1
+      include BitcoinSecp256k1
 
       N = OpenSSL::BN.new('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141', 16)
       G = OpenSSL::BN.new('79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798', 16)

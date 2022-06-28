@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/mechanizm/ruby-bitcoin-secp256k1.git
+  revision: d0c22a29722497c1d44ad1b8846680a414c79c00
+  specs:
+    bitcoin-secp256k1 (0.5.2)
+      ffi (>= 1.9.25)
+
 PATH
   remote: .
   specs:
@@ -16,8 +23,6 @@ GEM
       eventmachine
       ffi
       scrypt
-    bitcoin-secp256k1 (0.5.2)
-      ffi (>= 1.9.25)
     eventmachine (1.2.7)
     faraday (2.3.0)
       faraday-net_http (~> 2.0)
@@ -43,6 +48,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bitcoin-secp256k1!
   bundler (~> 1.16)
   minitest (~> 5.0)
   rake (~> 13.0)

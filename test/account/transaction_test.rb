@@ -1,5 +1,5 @@
 require "test_helper"
-require 'secp256k1'
+require 'bitcoin_secp256k1'
 
 class TransactionTest < Minitest::Test
   def setup
