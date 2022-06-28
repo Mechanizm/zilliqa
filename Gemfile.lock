@@ -1,19 +1,12 @@
-GIT
-  remote: https://github.com/mechanizm/ruby-bitcoin-secp256k1.git
-  revision: d0c22a29722497c1d44ad1b8846680a414c79c00
-  specs:
-    bitcoin-secp256k1 (0.5.2)
-      ffi (>= 1.9.25)
-
 PATH
   remote: .
   specs:
     zilliqa (0.1.4)
       bitcoin-ruby
-      bitcoin-secp256k1
       google-protobuf
       jsonrpc-client
       pbkdf2-ruby
+      ruby-bitcoin-secp256k1
       scrypt
 
 GEM
@@ -32,7 +25,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    google-protobuf (3.21.1)
+    google-protobuf (3.21.2)
     jsonrpc-client (0.1.3)
       faraday
       multi_json (>= 1.1.0)
@@ -40,6 +33,8 @@ GEM
     multi_json (1.15.0)
     pbkdf2-ruby (0.2.1)
     rake (13.0.6)
+    ruby-bitcoin-secp256k1 (0.5.2)
+      ffi (>= 1.9.25)
     ruby2_keywords (0.0.5)
     scrypt (3.0.7)
       ffi-compiler (>= 1.0, < 2.0)
@@ -48,7 +43,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bitcoin-secp256k1!
   bundler (~> 1.16)
   minitest (~> 5.0)
   rake (~> 13.0)
