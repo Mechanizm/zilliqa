@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zilliqa (0.1.5)
+    zilliqa (0.1.6)
       bitcoin-ruby
       bundler (>= 2.2.33)
       google-protobuf
