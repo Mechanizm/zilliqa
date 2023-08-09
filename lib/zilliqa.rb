@@ -14,6 +14,7 @@ require 'zilliqa/util/validator'
 require 'zilliqa/util/util'
 require 'zilliqa/util/unit'
 require 'zilliqa/util/bech32'
+require 'zilliqa/util/difficulty'
 
 
 module Zilliqa
