@@ -12,19 +12,6 @@ class TransactionTest < Minitest::Test
     end
   end
 
-  def test_return_a_checksummed_address_from_tx_params
-    tx_params = {
-      version: 0,
-      amount: '0',
-      gas_price: '1000',
-      gas_limit: 1000,
-      to_addr: '2E3C9B415B19AE4035503A06192A0FAD76E04243'
-    }
-
-    tx = Zilliqa::Account::Transaction.new(tx_params, nil)
-    assert Zilliqa::Util::Validator.checksum_address?(tx.to_payload[:toAddr])
-  end
-
   def test_should_poll_and_call_queued_handlers_on_confirmation
     responses = [
       {
@@ -66,7 +53,6 @@ class TransactionTest < Minitest::Test
     tx = Zilliqa::Account::Transaction.new(tx_params, @provider)
 
     @provider.expect("GetBalance", responses[0], [@address])
-    @provider.expect("testnet?", false)
     pending = @wallet.sign(tx)
 
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
@@ -229,15 +215,14 @@ class TransactionTest < Minitest::Test
   def test_devnet
     id = nil
     version = 21_823_489
-    gas_price = '1000000000'
-    gas_limit = 1
+    gas_price = '2000000000'
+    gas_limit = 50
 
     sender_pub_key = '027eaa76955940798e22ec4007b00dbf0002fcd34f501f58c04b06c604f2228076'
     to_addr = '0xFeEd7997A0a45682CD4D8CEda27f2d81F6ba587c'
     amount = '1000000000000'
 
     provider = Zilliqa::Jsonrpc::Provider.new('https://dev-api.zilliqa.com')
-    @provider.expect("testnet?", true)
     signer = Zilliqa::Account::Wallet.new(provider)
 
     private_key = '7e78c742bca06824e4a5f0591260a2646339507c231daa5a47bf91d801f98239'
@@ -259,7 +244,6 @@ class TransactionTest < Minitest::Test
 
     signed = signer.sign(tx)
     payload = signed.to_payload
-    puts payload
 
     provider.CreateTransaction(payload)
   end

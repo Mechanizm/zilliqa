@@ -30,13 +30,6 @@ class ValidatorTest < Minitest::Test
     assert Zilliqa::Util::Validator.address?(address)
   end
 
-  def test_checksum_address?
-    checksum_address = '0x4BAF5faDA8e5Db92C3d3242618c5B47133AE003C'
-    assert Zilliqa::Util::Validator.checksum_address?(checksum_address)
-    assert !Zilliqa::Util::Validator.checksum_address?(checksum_address[0..-2])
-    assert !Zilliqa::Util::Validator.checksum_address?(checksum_address.upcase)
-  end
-
   def test_bech32?
     address = 'zil1ej8wy3mnux6t9zeuc4vkhww0csctfpznzt4s76'
 

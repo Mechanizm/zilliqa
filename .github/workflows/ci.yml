@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, labeled, reopened, synchronize]
+  push:
+    branches: [master]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: test
+    services:
+    steps:
+      - uses: actions/checkout@v3
+      - run: sudo apt-get update -y && sudo apt-get install -y libsecp256k1-dev
+      - run: bundle exec rake test
