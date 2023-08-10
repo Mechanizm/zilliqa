@@ -17,4 +17,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: sudo apt-get update -y && sudo apt-get install -y libsecp256k1-dev
+      - run: bundle install
       - run: bundle exec rake test
