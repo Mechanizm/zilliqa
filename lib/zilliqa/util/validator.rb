@@ -22,16 +22,6 @@ module Zilliqa
         m != nil
       end
 
-      # checksum_address?
-      #
-      # takes hex-encoded string and returns boolean if address is checksumed
-      #
-      # @param {string} address
-      # @returns {boolean}
-      def self.checksum_address?(address)
-        self.address?(address) && Zilliqa::Account::Wallet::to_checksum_address(address) == address
-      end
-
       def self.bech32?(address)
         m = /^zil1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}/ =~ address
         m != nil

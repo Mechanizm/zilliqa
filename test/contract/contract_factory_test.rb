@@ -85,7 +85,6 @@ class ContractFactoryTest < Minitest::Test
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
-    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, deployed = contract.deploy(deploy_params)
@@ -96,7 +95,7 @@ class ContractFactoryTest < Minitest::Test
     assert deployed.deployed?
     assert_equal Zilliqa::Contract::ContractStatus::DEPLOYED, deployed.status
 
-    assert /[A-F0-9]+/ =~ contract.address
+    assert(/[A-F0-9]+/ =~ contract.address)
   end
 
   def test_should_not_swallow_network_errors
@@ -135,7 +134,6 @@ class ContractFactoryTest < Minitest::Test
     end
 
     @provider.expect("GetBalance", responses[0], [@address])
-    @provider.expect("testnet?", false)
 
     def @provider.CreateTransaction(payload)
       raise 'something bad happened'
@@ -143,7 +141,7 @@ class ContractFactoryTest < Minitest::Test
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     assert_raises 'something bad happened.' do
-      tx, deployed = contract.deploy(deploy_params)
+      contract.deploy(deploy_params)
     end
 
     @provider.verify
@@ -186,7 +184,6 @@ class ContractFactoryTest < Minitest::Test
 
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
-    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, contract = contract.deploy(deploy_params)
@@ -246,7 +243,6 @@ class ContractFactoryTest < Minitest::Test
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
-    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
     tx, contract = contract.deploy(deploy_params)
@@ -329,17 +325,15 @@ class ContractFactoryTest < Minitest::Test
       JSON.parse(JSON.generate(res))
     end
 
-    @provider.expect("testnet?", false)
     @provider.expect("GetBalance", responses[0], [@address])
     @provider.expect("CreateTransaction", responses[1], [Hash])
     @provider.expect("GetTransaction", responses[2], ['some_hash'])
     @provider.expect("GetBalance", responses[3], [@address])
     @provider.expect("CreateTransaction", responses[4], [Hash])
     @provider.expect("GetTransaction", responses[5], ['some_hash'])
-    @provider.expect("testnet?", false)
 
     deploy_params = Zilliqa::Contract::DeployParams.new(nil, Zilliqa::Util.pack(8, 8), nil, 1000, 1000, nil)
-    tx, contract = contract.deploy(deploy_params)
+    _, contract = contract.deploy(deploy_params)
 
     call_tx = contract.call(
       'myTransition',
