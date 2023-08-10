@@ -19,8 +19,8 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.6.1
-        rubygems: latest
-        bundler-cache: true
+          rubygems: latest
+          bundler-cache: true
       - uses: actions/checkout@v3
       - run: sudo apt-get update -y && sudo apt-get install -y libsecp256k1-dev
       - run: bundle install
