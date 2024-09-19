@@ -28,7 +28,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    google-protobuf (3.24.0)
+    google-protobuf (3.25.5)
     jsonrpc-client (0.1.4)
       faraday
       multi_json (>= 1.1.0)
